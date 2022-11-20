@@ -1,13 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Transfer Learning VGG 16 and VGG 19 using Keras
-# 
 
-# In[1]:
-
-
-# import the libraries as shown below
 import pandas as pd 
 import numpy as np 
 import seaborn as sns 
@@ -15,13 +9,14 @@ import matplotlib.pyplot as plt
 from tensorflow.keras.layers import Input, Lambda, Dense, Flatten
 from tensorflow.keras.models import Model
 from tensorflow.keras.applications.resnet50 import ResNet50
-#from keras.applications.vgg16 import VGG16
 from tensorflow.keras.applications.resnet50 import preprocess_input
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.preprocessing.image import ImageDataGenerator,load_img
 from tensorflow.keras.models import Sequential
 from glob import glob
 import streamlit as st
+
+
 
 
 # In[2]:
