@@ -1,6 +1,5 @@
-#!/usr/bin/env python
-# coding: utf-8
-
+# -- coding: utf-8 --
+#%matplotlib inline
 
 import pandas as pd 
 import numpy as np 
@@ -16,13 +15,10 @@ from tensorflow.keras.models import Sequential
 from glob import glob
 import streamlit as st
 
+st.set_page_config(layout="wide")
 
 
 
-# In[2]:
-
-
-# re-size all the images to this
 IMAGE_SIZE = [224, 224]
 
 train_path = 'Datasets/train'
