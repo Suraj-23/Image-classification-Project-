@@ -1,5 +1,6 @@
-# -- coding: utf-8 --
-#%matplotlib inline
+#!/usr/bin/env python
+# coding: utf-8
+
 
 import pandas as pd 
 import numpy as np 
@@ -15,99 +16,65 @@ from tensorflow.keras.models import Sequential
 from glob import glob
 import streamlit as st
 
+
 st.set_page_config(layout="wide")
 
+def add_bg_from_url():
+    st.markdown(
+         f"""
+         <style>
+         .stApp {{
+             background-image: url("https://uaenews247.com/2021/12/28/lamborghini-dubai-dealership-and-pop-up-lamborghini-lounge-inaugurated-in-dubai/");
+             background-attachment: fixed;
+	     background-position: 25% 75%;
+             background-size: cover
+         }}
+         </style>
+         """,
+         unsafe_allow_html=True
+     )
 
+add_bg_from_url()
 
+st.title('Car Image Classification')
+st.sidebar.header('Choose Image')
 IMAGE_SIZE = [224, 224]
 
 train_path = 'Datasets/train'
 valid_path = 'Datasets/test'
 
 
-# In[3]:
-
-
 train_path
 
 
-# In[4]:
-
-
-# Import the Vgg 16 library as shown below and add preprocessing layer to the front of VGG
-# Here we will be using imagenet weights
 
 resnet = ResNet50(input_shape=IMAGE_SIZE + [3], weights='imagenet', include_top=False)
 
 
-# In[5]:
 
-
-resnet.summary()
-
-
-# In[6]:
-
-
-# don't train existing weights
 for layer in resnet.layers:
     layer.trainable = False
 
 
-# In[7]:
-
-
-# useful for getting number of output classes
 folders = glob('Datasets/train/*')
 
 
-# In[8]:
-
-
-folders
-
-
-# In[9]:
-
-
-len(folders)
-
-
-# In[10]:
-
-
-# our layers - you can add more if you want
 x = Flatten()(resnet.output)
 
-
-# In[11]:
 
 
 prediction = Dense(len(folders), activation='softmax')(x)
 
-# create a model object
+
 model = Model(inputs=resnet.input, outputs=prediction)
 
 
-# In[12]:
-
-
-# view the structure of the model
-model.summary()
-
-
-# In[13]:
-
-
-# tell the model what cost and optimization method to use
 model.compile(
   loss='categorical_crossentropy',
   optimizer='adam',
   metrics=['accuracy']
 )
 
-
-# In[14]:
 
 
 # Use the Image Data Generator to import the images from the dataset
@@ -121,8 +88,6 @@ train_datagen = ImageDataGenerator(rescale = 1./255,
 test_datagen = ImageDataGenerator(rescale = 1./255)
 
 
-# In[15]:
-
 
 # Make sure you provide the same target size as initialied for the image size
 training_set = train_datagen.flow_from_directory('Datasets/train',
@@ -130,16 +95,12 @@ training_set = train_datagen.flow_from_directory('Datasets/train',
                                                  batch_size = 32,class_mode = 'categorical')
 
 
-# In[16]:
-
 
 test_set = test_datagen.flow_from_directory('Datasets/test',
                                             target_size = (224, 224),
                                             batch_size = 32,
                                             class_mode = 'categorical')
 
-
-# In[17]:
 
 
 # fit the model
@@ -152,14 +113,6 @@ r = model.fit_generator(
   validation_steps=len(test_set)
 )
 
-
-# In[18]:
-
-
-r.history
-
-
-# In[19]:
 
 
 # plot the loss
@@ -179,8 +132,6 @@ plt.show()
 plt.savefig('AccVal_acc')
 
 
-# In[20]:
-
 
 # save it as a h5 file
 
@@ -190,19 +141,13 @@ from tensorflow.keras.models import load_model
 model.save('model_resnet50.h5')
 
 
-# In[21]:
-
 
 y_pred = model.predict(test_set)
 
 
-# In[22]:
-
 
 y_pred
 
-
-# In[23]:
 
 
 import numpy as np 
